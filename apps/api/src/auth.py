@@ -1,4 +1,5 @@
-from fastapi import HTTPException, Header, status
+from fastapi import Header, HTTPException, status
+
 
 def get_current_user(authorization: str = Header(...)):
     # In a real application, you would decode and verify the JWT token here.

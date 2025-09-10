@@ -1,9 +1,11 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, ARRAY
+from sqlalchemy import ARRAY, Column, DateTime, Integer, String, Text
 from sqlalchemy.sql import func
+
 from ..database import Base
 
+
 class Job(Base):
-    __tablename__ = 'jobs'
+    __tablename__ = "jobs"
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), nullable=False)

@@ -1,8 +1,9 @@
-import pytest
 import httpx
+import pytest
 
 # Base URL for the API
 BASE_URL = "http://127.0.0.1:8000"
+
 
 def test_search_endpoint_exists():
     """
@@ -16,7 +17,10 @@ def test_search_endpoint_exists():
             assert response.status_code != 404
     except httpx.ConnectError:
         # This is the expected failure until the server is running
-        pytest.fail("Connection to the server failed. This is expected if the server is not running.")
+        pytest.fail(
+            "Connection to the server failed. "
+            "This is expected if the server is not running."
+        )
     except Exception as e:
         pytest.fail(f"An unexpected error occurred: {e}")
 
