@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { frontendLogger } from '../services/logger';
 
 const SearchPage: React.FC = () => {
+  useEffect(() => {
+    frontendLogger.info('Search page loaded.');
+  }, []);
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">Job Search</h1>

@@ -1,8 +1,6 @@
-from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, ARRAY
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, Text, DateTime, ARRAY
 from sqlalchemy.sql import func
-
-Base = declarative_base()
+from ..database import Base
 
 class Job(Base):
     __tablename__ = 'jobs'

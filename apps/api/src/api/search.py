@@ -1,25 +1,31 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from typing import List
+from sqlalchemy.orm import Session
 from ..services.search_service import SearchService
+from ..database import get_db
+from ..auth import get_current_user
+from ..schemas import SearchQueryParams # Import SearchQueryParams
+import logging
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 @router.get("/api/v1/search", response_model=List[dict])
 def search_jobs(
-    title: str = None,
-    location: str = None,
-    tags: str = None,
-    salary_min: int = None,
-    salary_max: int = None,
-    search_service: SearchService = Depends(SearchService)
+    params: SearchQueryParams = Depends(), # Use SearchQueryParams for validation
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
 ):
+    logger.info(f"Search request received from user: {current_user['username']} with params: {params.dict()}")
     # The tags parameter is a comma-separated string, we need to convert it to a list
-    tags_list = tags.split(',') if tags else []
+    tags_list = params.tags.split(',') if params.tags else []
+    search_service = SearchService(db)
     jobs = search_service.search_jobs(
-        title=title,
-        location=location,
+        title=params.title,
+        location=params.location,
         tags=tags_list,
-        salary_min=salary_min,
-        salary_max=salary_max
+        salary_min=params.salary_min,
+        salary_max=params.salary_max
     )
+    logger.info(f"Search request completed. Found {len(jobs)} jobs.")
     return jobs
