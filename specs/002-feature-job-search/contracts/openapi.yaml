@@ -1,0 +1,103 @@
+openapi: 3.0.0
+info:
+  title: JobFlux API
+  version: 1.0.0
+  description: API for JobFlux application
+paths:
+  /api/v1/search:
+    get:
+      summary: Search for jobs
+      parameters:
+        - in: query
+          name: title
+          schema:
+            type: string
+          description: Job title
+        - in: query
+          name: location
+          schema:
+            type: string
+          description: Job location
+        - in: query
+          name: tags
+          schema:
+            type: string
+          description: Comma-separated list of tags
+        - in: query
+          name: salary_min
+          schema:
+            type: integer
+          description: Minimum salary
+        - in: query
+          name: salary_max
+          schema:
+            type: integer
+          description: Maximum salary
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 20
+          description: Number of results per page
+      responses:
+        '200':
+          description: A paginated list of jobs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  page:
+                    type: integer
+                  per_page:
+                    type: integer
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Job'
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+
+components:
+  schemas:
+    Job:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        location:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        salary_min:
+          type: integer
+        salary_max:
+          type: integer
+        description:
+          type: string
+        company:
+          type: string
+        url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
